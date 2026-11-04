@@ -170,10 +170,22 @@ RegisterServerEvent("illenium-appearance:server:saveAppearance", function(appear
     end
 end)
 
-RegisterServerEvent("illenium-appearance:server:chargeCustomer", function(shopType)
+-- fwb_inventory: clothes are items when it runs in clothing items mode
+exports("fwbClothing", function()
+    return 1
+end)
+
+local function clothingItems()
+    return GetResourceState("fwb_inventory") == "started" and exports.fwb_inventory:IsClothingItems()
+end
+
+RegisterServerEvent("illenium-appearance:server:chargeCustomer", function(shopType, appearance)
     local src = source
     local money = getMoneyForShop(shopType)
     if Framework.RemoveMoney(src, "cash", money) then
+        if shopType == "clothing" and appearance and clothingItems() then
+            exports.fwb_inventory:WearPieces(src, { components = appearance.components, props = appearance.props })
+        end
         lib.notify(src, {
             title = _L("purchase.store.success.title"),
             description = string.format(_L("purchase.store.success.description"), money, shopType),
@@ -187,6 +199,13 @@ RegisterServerEvent("illenium-appearance:server:chargeCustomer", function(shopTy
             type = "error",
             position = Config.NotifyOptions.position
         })
+    end
+end)
+
+-- an outfit only puts on the pieces the player has as items
+RegisterNetEvent("illenium-appearance:server:wearOutfit", function(components, props)
+    if clothingItems() then
+        exports.fwb_inventory:WearOwned(source, { components = components, props = props })
     end
 end)
 

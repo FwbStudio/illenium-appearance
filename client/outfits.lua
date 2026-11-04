@@ -116,6 +116,8 @@ function LoadJobOutfit(oData)
         end
     end
 
+    TriggerServerEvent("illenium-appearance:server:wearOutfit", client.getPedComponents(ped), client.getPedProps(ped))
+
     local length = 0
     for _ in pairs(data) do
         length = length + 1

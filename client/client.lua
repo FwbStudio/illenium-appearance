@@ -140,7 +140,7 @@ function OpenShop(config, isPedMenu, shopType)
         client.startPlayerCustomization(function(appearance)
             if appearance then
                 if not isPedMenu then
-                    TriggerServerEvent("illenium-appearance:server:chargeCustomer", shopType)
+                    TriggerServerEvent("illenium-appearance:server:chargeCustomer", shopType, appearance)
                 end
                 TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
             else
@@ -665,6 +665,7 @@ RegisterNetEvent("illenium-appearance:client:changeOutfit", function(data)
         client.setPedComponents(cache.ped, data.components)
         client.setPedProps(cache.ped, data.props)
         client.setPedHair(cache.ped, appearanceDB.hair, appearanceDB.tattoos)
+        TriggerServerEvent("illenium-appearance:server:wearOutfit", data.components, data.props)
 
         if data.disableSave then
             TriggerServerEvent("illenium-appearance:server:syncUniform", {
