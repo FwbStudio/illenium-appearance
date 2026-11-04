@@ -8,7 +8,7 @@ version "main"
 
 lua54 "yes"
 
-fwb_inventory "clothing"
+fwb_clothing "1"
 
 client_scripts {
   "game/constants.lua",
